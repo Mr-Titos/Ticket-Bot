@@ -1,6 +1,8 @@
+require('dotenv').config();
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 const fs = require('fs');
+const token = process.env.DISCORD_TOKEN;
 
 
 var prefix = "";
@@ -43,7 +45,7 @@ function C_Cat(serv) {
     })
   }
 
-function C_Chan(resolve,serv,user) {
+function C_Chan(cat,serv,user) {
     serv.createChannel("prblm-" + idticket, "text", [
         {
             id: serv.defaultRole.id,
@@ -59,18 +61,15 @@ function C_Chan(resolve,serv,user) {
         },
 
     ]).then(channel => {
-        channel.setParent(resolve.id); // resolve est le channel categorie
+        channel.setParent(cat.id); // cat est le channel categorie parent
         channel.sendMessage("@everyone Le ticket est ouvert !");
         if(msgprblm !== "") {
             channel.sendMessage("Le probleme est le suivant : \r\n" + msgprblm);
-            msgprblm = "";
         }
     }).catch(console.error);
     
     idticket++;
-    fs.writeFileSync("save.txt", idticket + ',' + save[1] + ',' + prefix, { encoding: 'utf8'});
- 
-         
+    fs.writeFileSync("save.txt", idticket + ',' + save[1] + ',' + prefix, { encoding: 'utf8'});         
 }
 
 bot.on('message', msg => {
@@ -168,4 +167,4 @@ bot.on('message', msg => {
   });
 
   
-bot.login('NTc5Mzk0NzA3MDcxODI3OTc4.XOBjpA.wHq1gZg0spPy4-F8GPJIUYc4BrQ');
+bot.login(token);
